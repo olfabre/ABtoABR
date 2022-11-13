@@ -30,6 +30,7 @@ class AB
 	noeud *r;
 	int T[50]; // Tableau destiné à contenir les noeuds en ordre croissant.
 	int n;		 // Nombre de noeuds de l'arbre.
+	int t;
 
 public:
 	AB(noeud *x);
@@ -41,6 +42,8 @@ public:
 	void Postfixe(noeud *x);
 	int Hauteur(noeud *x);
 	int N(noeud *x);
+	void InfixeCleTableau(noeud *x, int &compteur);
+	void InfixeTableauCle(noeud *x, int &compteur2);
 	void Tri();
 	void ABtoABR(noeud *x);
 	int Compter_recursive(noeud *x);

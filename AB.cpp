@@ -18,6 +18,7 @@ using namespace std;
 noeud::noeud(int x)
 {
 	cle = x;
+
 	fg = fd = pere = NULL;
 }
 
@@ -127,7 +128,7 @@ void AB::Infixe(noeud *x)
 /****************************************/
 int AB::Compter_recursive(noeud *x)
 {
-	if (!x)
+	if (x == NULL)
 		return 0;
 	else
 		return 1 + Compter_recursive(x->fg) + Compter_recursive(x->fd);
@@ -165,33 +166,60 @@ int AB::Hauteur(noeud *x)
 }
 
 /****************************************/
-/* Objectif : Retourne
+/* Objectif : Parcours infixe et insertion des Noeud->clés dans un Tableau[indice]->entier
 /****************************************/
-void AB::LectureNoeud(noeud *x)
+void AB::InfixeCleTableau(noeud *x, int &compteur)
 {
-	if (x)
+	if (x && compteur < 50)
 	{
-		Infixe(x->fg);
-		Infixe(x->fd);
+		InfixeCleTableau(x->fg, compteur);
+		T[compteur] = x->cle;
+		compteur++;
+		InfixeCleTableau(x->fd, compteur);
 	}
 }
+/****************************************/
+/* Objectif : Parcours infixe et insertion du Tableau[indice]->entier au Noeud->clés
+/****************************************/
+void AB::InfixeTableauCle(noeud *x, int &compteur2)
+{
 
+	if (x)
+	{
+		InfixeTableauCle(x->fg, compteur2);
+		x->cle = T[compteur2];
+		++compteur2;
+		InfixeTableauCle(x->fd, compteur2);
+	}
+}
 /****************************************/
 /* Objectif : Stocker dans T les valeurs
 /* de l'arbre triées en ordre croissant
 /****************************************/
 void AB::Tri()
 {
-	// !!! A FAIRE !!! //
-	T[0] = 0;
-	T[1] = 1;
-	T[2] = 2;
-	T[3] = 3;
-	T[4] = 4;
-	T[5] = 5;
-	T[6] = 6;
-	T[7] = 7;
-	T[8] = 8;
+
+	int tempValeur;
+	int compteur(0);
+	int v1 = 0;
+	// Insertion des clés dans le tableau
+	AB::InfixeCleTableau(root(), compteur);
+
+	// Tri par comparaison (=> swap les valeurs si v0>v1)
+
+	for (int v0 = 0; v0 < N(r); v0++)
+	{
+
+		for (int v1 = v0 + 1; v1 < N(r); v1++)
+		{
+			if (T[v0] > T[v1])
+			{
+				tempValeur = T[v1];
+				T[v1] = T[v0];
+				T[v0] = tempValeur;
+			}
+		}
+	}
 }
 
 /****************************************/
@@ -201,5 +229,9 @@ void AB::Tri()
 /****************************************/
 void AB::ABtoABR(noeud *x)
 {
-	// !!! A FAIRE !!! //
+	int compteur(0);
+	if (x != NULL)
+	{
+		AB::InfixeTableauCle(root(), compteur);
+	}
 }
